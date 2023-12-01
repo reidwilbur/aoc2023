@@ -6,16 +6,25 @@ import java.util.Set;
 
 class Day1 {
   private static final Map<String, Integer> WORD_TO_NUM =
-      Map.of(
-          "one", 1,
-          "two", 2,
-          "three", 3,
-          "four", 4,
-          "five", 5,
-          "six", 6,
-          "seven", 7,
-          "eight", 8,
-          "nine", 9);
+      Map.ofEntries(
+          Map.entry("1", 1),
+          Map.entry("2", 2),
+          Map.entry("3", 3),
+          Map.entry("4", 4),
+          Map.entry("5", 5),
+          Map.entry("6", 6),
+          Map.entry("7", 7),
+          Map.entry("8", 8),
+          Map.entry("9", 9),
+          Map.entry("one", 1),
+          Map.entry("two", 2),
+          Map.entry("three", 3),
+          Map.entry("four", 4),
+          Map.entry("five", 5),
+          Map.entry("six", 6),
+          Map.entry("seven", 7),
+          Map.entry("eight", 8),
+          Map.entry("nine", 9));
 
   public static int decodeCalibration(String[] lines) {
     var sum = 0;
@@ -54,14 +63,9 @@ class Day1 {
 
   static int getFirstNum(String line) {
     for (var idx = 0; idx < line.length(); idx++) {
-      var numChar = line.charAt(idx) - '0';
-      if (numChar >= 0 && numChar <= 9) {
-        return numChar;
-      } else {
-        var optNumStr = startsWith(line.substring(idx), WORD_TO_NUM.keySet());
-        if (optNumStr.isPresent()) {
-          return WORD_TO_NUM.get(optNumStr.get());
-        }
+      var optNumStr = startsWith(line.substring(idx), WORD_TO_NUM.keySet());
+      if (optNumStr.isPresent()) {
+        return WORD_TO_NUM.get(optNumStr.get());
       }
     }
     throw new RuntimeException("No number found for " + line);
@@ -69,14 +73,9 @@ class Day1 {
 
   static int getLastNum(String line) {
     for (var idx = line.length() - 1; idx >= 0; idx--) {
-      var numChar = line.charAt(idx) - '0';
-      if (numChar >= 0 && numChar <= 9) {
-        return numChar;
-      } else {
-        var optNumStr = endsWith(line.substring(0, idx + 1), WORD_TO_NUM.keySet());
-        if (optNumStr.isPresent()) {
-          return WORD_TO_NUM.get(optNumStr.get());
-        }
+      var optNumStr = endsWith(line.substring(0, idx + 1), WORD_TO_NUM.keySet());
+      if (optNumStr.isPresent()) {
+        return WORD_TO_NUM.get(optNumStr.get());
       }
     }
     throw new RuntimeException("No number found for " + line);
