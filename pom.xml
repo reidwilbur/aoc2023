@@ -13,6 +13,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.1</junit.version>
     <surefire.version>3.2.2</surefire.version>
+    <fmt.version>2.21.1</fmt.version>
   </properties>
 
   <dependencies>
@@ -71,6 +72,18 @@
         <configuration>
           <argLine>--enable-preview</argLine>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify.fmt</groupId>
+        <artifactId>fmt-maven-plugin</artifactId>
+        <version>${fmt.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

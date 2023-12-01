@@ -11,23 +11,26 @@ public class Day1Test {
 
   private static final String[] TEST_INPUT = Input.TEST.loadStrings();
 
+  private static final String[] TEST_INPUT2 = new Input("-test2").loadStrings();
+
   @Test
-  void testGetMostCals_testInput() {
-    assertThat(Day1.getMostCals(TEST_INPUT, 1), is(24000));
-  }
-  
-  @Test
-  void testGetMostCals_puzzleInput() {
-    assertThat(Day1.getMostCals(PUZZLE_INPUT, 1), is(70374));
-  }
-  
-  @Test
-  void testGetMostCals_Top3_testInput() {
-    assertThat(Day1.getMostCals(TEST_INPUT, 3), is(45000));
+  void testDecodeCal_testInput() {
+    assertThat(Day1.decodeCalibration(TEST_INPUT), is(142));
   }
 
   @Test
-  void testGetMostCals_Top3_puzzleInput() {
-    assertThat(Day1.getMostCals(PUZZLE_INPUT, 3), is(204610));
+  void testDecodeCal_puzzleInput() {
+    assertThat(Day1.decodeCalibration(PUZZLE_INPUT), is(54304));
+  }
+
+  @Test
+  void testDecodeCalAlpha_testInput() {
+    assertThat(Day1.decodeCalibrationAlpha(TEST_INPUT2), is(281));
+  }
+
+  @Test
+  void testDecodeCalAlpha_puzzleInput() {
+    // 54412 too low
+    assertThat(Day1.decodeCalibrationAlpha(PUZZLE_INPUT), is(54418));
   }
 }

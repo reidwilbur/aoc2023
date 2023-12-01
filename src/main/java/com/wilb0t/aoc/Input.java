@@ -18,7 +18,7 @@ public class Input {
   public static Input TEST = new Input("-test");
   private final String suffix;
 
-  private Input(String suffix) {
+  public Input(String suffix) {
     this.suffix = suffix;
   }
 
@@ -37,7 +37,7 @@ public class Input {
       throw new RuntimeException(e);
     }
   }
-  
+
   public int[][] loadIntGrid() {
     try {
       var caller =
@@ -47,7 +47,7 @@ public class Input {
       throw new RuntimeException(e);
     }
   }
-  
+
   public static int[][] copy(int[][] input) {
     var copy = new int[input.length][];
     for (var r = 0; r < input.length; r++) {
@@ -55,12 +55,15 @@ public class Input {
     }
     return copy;
   }
-  
+
   public int[] loadIntsFlat() {
     try {
       var caller =
           StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
-      return getInput(caller).flatMap(s -> Arrays.stream(s.split(","))).mapToInt(Integer::parseInt).toArray();
+      return getInput(caller)
+          .flatMap(s -> Arrays.stream(s.split(",")))
+          .mapToInt(Integer::parseInt)
+          .toArray();
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
@@ -85,7 +88,7 @@ public class Input {
       throw new RuntimeException(e);
     }
   }
-  
+
   public <T> List<T> loadFlat(Function<String, Stream<T>> mapper) {
     try {
       var caller =
@@ -95,7 +98,7 @@ public class Input {
       throw new RuntimeException(e);
     }
   }
-  
+
   public <T> T parse(Function<List<String>, T> parser) {
     try {
       var caller =
