@@ -37,4 +37,14 @@ public class Day2Test {
   void testGetValidGames_puzzleInput() {
     assertThat(Day2.getValidGames(PUZZLE_INPUT), is(2679));
   }
+
+  @Test
+  void testGetPower_testInput() {
+    assertThat(Day2.getPower(TEST_INPUT), is(2286L));
+  }
+
+  @Test
+  void testGetPower_puzzleInput() {
+    assertThat(Day2.getPower(PUZZLE_INPUT), is(77607L));
+  }
 }
