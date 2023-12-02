@@ -1,15 +1,26 @@
 package com.wilb0t.aoc;
 
-import static com.wilb0t.aoc.Util.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 class Day2 {
 
-  public record Reveal(List<Pair<String, Integer>> cubes) {
+  public enum Color {
+    RED,
+    GREEN,
+    BLUE;
+
+    public static Color from(String clr) {
+      return Color.valueOf(clr.toUpperCase(Locale.ENGLISH));
+    }
+  }
+
+  public record Cube(Color color, int count) {}
+
+  public record Reveal(List<Cube> cubes) {
     public static Reveal from(String line) {
       var parts = line.split(", ");
       var cubes =
@@ -17,14 +28,14 @@ class Day2 {
               .map(
                   clrstr -> {
                     var clrparts = clrstr.split(" ");
-                    return new Pair<>(clrparts[1], Integer.valueOf(clrparts[0]));
+                    return new Cube(Color.from(clrparts[1]), Integer.parseInt(clrparts[0]));
                   })
               .toList();
       return new Reveal(cubes);
     }
 
-    public boolean isValid(Map<String, Integer> limits) {
-      return cubes.stream().allMatch(cube -> limits.getOrDefault(cube.first(), 0) >= cube.second());
+    public boolean isValid(Map<Color, Integer> limits) {
+      return cubes.stream().allMatch(cube -> limits.getOrDefault(cube.color(), 0) >= cube.count());
     }
   }
 
@@ -41,25 +52,24 @@ class Day2 {
       return lines.stream().map(Game::from).toList();
     }
 
-    public boolean isValid(Map<String, Integer> limits) {
+    public boolean isValid(Map<Color, Integer> limits) {
       return reveals.stream().allMatch(reveal -> reveal.isValid(limits));
     }
 
     public long getPower() {
-      var max = new HashMap<>(Map.of("red", 0L, "green", 0L, "blue", 0L));
+      var colorMax = new HashMap<>(Map.of(Color.RED, 0L, Color.GREEN, 0L, Color.BLUE, 0L));
       reveals.forEach(
           reveal ->
               reveal.cubes.forEach(
                   cube ->
-                      max.compute(
-                          cube.first(), (k, v) -> (cube.second() > v) ? cube.second() : v)));
-      return max.values().stream().reduce(1L, (l, r) -> l * r);
+                      colorMax.compute(
+                          cube.color(), (k, max) -> (cube.count() > max) ? cube.count() : max)));
+      return colorMax.values().stream().reduce(1L, (l, r) -> l * r);
     }
   }
 
   public static int getValidGames(List<Game> games) {
-    var limits = Map.of("red", 12, "green", 13, "blue", 14);
-
+    var limits = Map.of(Color.RED, 12, Color.GREEN, 13, Color.BLUE, 14);
     return games.stream().filter(game -> game.isValid(limits)).mapToInt(Game::id).sum();
   }
 

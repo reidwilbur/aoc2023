@@ -1,7 +1,6 @@
 package com.wilb0t.aoc;
 
 import static com.wilb0t.aoc.Day2.*;
-import static com.wilb0t.aoc.Util.Pair;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -20,10 +19,11 @@ public class Day2Test {
         new Day2.Game(
             1,
             List.of(
-                new Reveal(List.of(new Pair<>("blue", 3), new Pair<>("red", 4))),
+                new Reveal(List.of(new Cube(Color.BLUE, 3), new Cube(Color.RED, 4))),
                 new Reveal(
-                    List.of(new Pair<>("red", 1), new Pair<>("green", 2), new Pair<>("blue", 6))),
-                new Reveal(List.of(new Pair<>("green", 2)))));
+                    List.of(
+                        new Cube(Color.RED, 1), new Cube(Color.GREEN, 2), new Cube(Color.BLUE, 6))),
+                new Reveal(List.of(new Cube(Color.GREEN, 2)))));
 
     assertThat(TEST_INPUT.get(0), is(exp));
   }
