@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 class Day4 {
 
   public record Card(int id, List<Integer> winningNums, Set<Integer> playNums) {
+
     public static Card from(String line) {
       var parts = line.split(":\\s+");
       var id = Integer.parseInt(parts[0].split("\\s+")[1]);
@@ -32,7 +33,7 @@ class Day4 {
       return points;
     }
 
-    public long matches() {
+    public long matchCount() {
       return winningNums.stream().filter(playNums::contains).count();
     }
 
@@ -45,13 +46,11 @@ class Day4 {
     return cards.stream().mapToInt(Card::points).sum();
   }
 
-  public static int getCardCount(List<Card> cards) {
+  public static int getCardCounts(List<Card> cards) {
     var idCounts = new int[cards.size()];
     Arrays.fill(idCounts, -1);
     for (var idx = 0; idx < cards.size(); idx++) {
-      if (idCounts[idx] == -1) {
-        getCount(cards.get(idx), idCounts, cards);
-      }
+      getCount(cards.get(idx), idCounts, cards);
     }
     return Arrays.stream(idCounts).sum();
   }
@@ -60,13 +59,13 @@ class Day4 {
     if (counts[card.idx()] != -1) {
       return counts[card.idx()];
     }
-    var matches = card.matches();
-    if (matches == 0) {
+    var matchCount = card.matchCount();
+    if (matchCount == 0) {
       counts[card.idx()] = 1;
       return 1;
     }
     var count = 1;
-    for (var midx = 0; midx < matches; midx++) {
+    for (var midx = 0; midx < matchCount; midx++) {
       count += getCount(cards.get(card.idx() + 1 + midx), counts, cards);
     }
     counts[card.idx()] = count;

@@ -43,12 +43,12 @@ public class Day4Test {
   }
 
   @Test
-  void testGetCardCount_testInput() {
-    assertThat(Day4.getCardCount(TEST_INPUT), is(30));
+  void testGetCardCounts_testInput() {
+    assertThat(Day4.getCardCounts(TEST_INPUT), is(30));
   }
 
   @Test
-  void testGetCardCount_puzzleInput() {
-    assertThat(Day4.getCardCount(PUZZLE_INPUT), is(10378710));
+  void testGetCardCounts_puzzleInput() {
+    assertThat(Day4.getCardCounts(PUZZLE_INPUT), is(10378710));
   }
 }
