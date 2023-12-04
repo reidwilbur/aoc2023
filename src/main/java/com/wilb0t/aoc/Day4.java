@@ -1,7 +1,6 @@
 package com.wilb0t.aoc;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,7 +13,10 @@ class Day4 {
       var id = Integer.parseInt(parts[0].split("\\s+")[1]);
       var numParts = parts[1].split("\\s+\\|\\s+");
       var winningNums = Arrays.stream(numParts[0].split("\\s+")).map(Integer::parseInt).toList();
-      var playNums = Arrays.stream(numParts[1].split("\\s+")).map(Integer::parseInt).collect(Collectors.toSet());
+      var playNums =
+          Arrays.stream(numParts[1].split("\\s+"))
+              .map(Integer::parseInt)
+              .collect(Collectors.toSet());
       return new Card(id, winningNums, playNums);
     }
 

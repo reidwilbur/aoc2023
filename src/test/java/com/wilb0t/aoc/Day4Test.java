@@ -17,9 +17,9 @@ public class Day4Test {
   @Test
   void testParse() {
     assertThat(TEST_INPUT.size(), is(6));
-    assertThat(TEST_INPUT.get(0), is(
-        new Card(1, List.of(41, 48, 83, 86, 17), Set.of(83, 86, 6, 31, 17, 9, 48, 53))
-    ));
+    assertThat(
+        TEST_INPUT.get(0),
+        is(new Card(1, List.of(41, 48, 83, 86, 17), Set.of(83, 86, 6, 31, 17, 9, 48, 53))));
   }
 
   @Test
