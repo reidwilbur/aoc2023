@@ -49,9 +49,7 @@ class Day4 {
   public static int getCardCounts(List<Card> cards) {
     var idCounts = new int[cards.size()];
     Arrays.fill(idCounts, -1);
-    for (var idx = 0; idx < cards.size(); idx++) {
-      getCount(cards.get(idx), idCounts, cards);
-    }
+    cards.forEach(card -> getCount(card, idCounts, cards));
     return Arrays.stream(idCounts).sum();
   }
 
