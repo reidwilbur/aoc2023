@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
@@ -25,23 +24,23 @@ public class Day5Test {
         TEST_INPUT.maps().get("seed"),
         is(
             new RangeMap(
-                "seed", "soil", List.of(new Range(52L, 50L, 48L), new Range(50L, 98L, 2L)))));
+                "seed", "soil", List.of(new Range(50L, 98L, 2L), new Range(52L, 50L, 48L)))));
   }
 
   @Test
   void testGetMapping() {
-    assertThat(TEST_INPUT.maps().get("seed").apply(79), is(Map.entry("soil", 81L)));
-    assertThat(TEST_INPUT.maps().get("seed").apply(14), is(Map.entry("soil", 14L)));
-    assertThat(TEST_INPUT.maps().get("seed").apply(55), is(Map.entry("soil", 57L)));
-    assertThat(TEST_INPUT.maps().get("seed").apply(13), is(Map.entry("soil", 13L)));
+    assertThat(TEST_INPUT.maps().get("seed").apply(79).value(), is(81L));
+    assertThat(TEST_INPUT.maps().get("seed").apply(14).value(), is(14L));
+    assertThat(TEST_INPUT.maps().get("seed").apply(55).value(), is(57L));
+    assertThat(TEST_INPUT.maps().get("seed").apply(13).value(), is(13L));
   }
 
   @Test
   void testGetLocation() {
-    assertThat(TEST_INPUT.getLocation(79), is(82L));
-    assertThat(TEST_INPUT.getLocation(14), is(43L));
-    assertThat(TEST_INPUT.getLocation(55), is(86L));
-    assertThat(TEST_INPUT.getLocation(13), is(35L));
+    assertThat(TEST_INPUT.getLocation(79).value(), is(82L));
+    assertThat(TEST_INPUT.getLocation(14).value(), is(43L));
+    assertThat(TEST_INPUT.getLocation(55).value(), is(86L));
+    assertThat(TEST_INPUT.getLocation(13).value(), is(35L));
   }
 
   @Test

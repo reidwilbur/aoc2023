@@ -12,6 +12,8 @@ class Day5 {
 
   public record SeedRange(long first, long last) {}
 
+  public record RangeResult(long value, long len) {}
+
   public record Range(long dstStart, long srcStart, long len) {
     public static Range from(String line) {
       var parts = Arrays.stream(line.split("\\s+")).map(Long::parseLong).toList();
@@ -21,11 +23,16 @@ class Day5 {
       return new Range(parts.get(0), parts.get(1), parts.get(2));
     }
 
-    public long apply(long src) {
-      if ((src < srcStart + len) && src >= srcStart) {
-        return (src - srcStart) + dstStart;
+    public RangeResult apply(long src) {
+      if (src < srcStart) {
+        return new RangeResult(-1, srcStart - src);
       }
-      return -1;
+      if (src < srcStart + len) {
+        long value = (src - srcStart) + dstStart;
+        long rlen = (srcStart + len) - src;
+        return new RangeResult(value, rlen);
+      }
+      return new RangeResult(-1, Long.MAX_VALUE);
     }
   }
 
@@ -34,22 +41,21 @@ class Day5 {
       var parts = lines.get(0).substring(0, lines.get(0).length() - 5).split("-to-");
       var input = parts[0];
       var output = parts[1];
-      var ranges =
-          lines.subList(1, lines.size()).stream()
-              .map(Range::from)
-              .sorted(Comparator.comparing(Range::srcStart))
-              .toList();
+      var ranges = lines.subList(1, lines.size()).stream().map(Range::from).toList();
       return new RangeMap(input, output, ranges);
     }
 
-    public Map.Entry<String, Long> apply(long src) {
-      return Map.entry(
-          output,
-          ranges.stream()
-              .map(range -> range.apply(src))
-              .filter(val -> val != -1)
-              .findFirst()
-              .orElse(src));
+    public RangeResult apply(long src) {
+      return ranges.stream()
+          .map(range -> range.apply(src))
+          // all vals will be -1 or a single positive val, so take largest val
+          // if all vals are -1, then want the one with the lowest len since will be using
+          // this to determine how many values to skip in the range
+          .min(Comparator.comparing(RangeResult::value).reversed().thenComparing(RangeResult::len))
+          // dont actually return -1, replace with the src value here since -1 was a placeholder
+          // for src val not in range
+          .map(res -> (res.value == -1) ? new RangeResult(src, res.len) : res)
+          .orElseThrow();
     }
   }
 
@@ -79,36 +85,35 @@ class Day5 {
       return new Almanac(seeds, maps);
     }
 
-    public long getLocation(long seed) {
+    public RangeResult getLocation(long seed) {
       var input = "seed";
-      var mapped = seed;
+      RangeResult result = new RangeResult(seed, Long.MAX_VALUE);
       while (maps.containsKey(input)) {
         var map = maps.get(input);
-        var result = map.apply(mapped);
-        input = result.getKey();
-        mapped = result.getValue();
+        var nextRes = map.apply(result.value);
+        // need to keep the min len value seen so far since that's where we will need
+        // to search next for the seed range case
+        result = new RangeResult(nextRes.value, Math.min(result.len, nextRes.len));
+        input = map.output;
       }
-      return mapped;
+      return result;
     }
 
     public long getLowestLocation() {
-      return seeds.stream().mapToLong(this::getLocation).min().orElseThrow();
+      return seeds.stream().mapToLong(seed -> getLocation(seed).value).min().orElseThrow();
     }
 
     public long getLowest(SeedRange seedRange) {
-      long jmp = 1000;
-      long lowest = Long.MAX_VALUE;
+      var lowest = new RangeResult(Long.MAX_VALUE, Long.MAX_VALUE);
       for (long seed = seedRange.first; seed <= seedRange.last; ) {
-        long location = getLocation(seed);
-        lowest = Math.min(location, lowest);
-        long jmpLocation = getLocation(seed + jmp);
-        if (jmpLocation == location + jmp) {
-          seed += jmp;
-        } else {
-          seed += 1;
+        var result = getLocation(seed);
+        lowest = (result.value < lowest.value) ? result : lowest;
+        if (result.len == Long.MAX_VALUE) {
+          return lowest.value;
         }
+        seed += result.len;
       }
-      return lowest;
+      return lowest.value;
     }
 
     public long getLowestLocationSeedRanges() {
