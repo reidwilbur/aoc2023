@@ -40,6 +40,9 @@ class Day6 {
   }
 
   public static long getWinners(List<RaceRecord> raceRecords) {
-    return raceRecords.stream().mapToLong(RaceRecord::getWinnerCount).reduce((l, r) -> l * r).orElseThrow();
+    return raceRecords.stream()
+        .mapToLong(RaceRecord::getWinnerCount)
+        .reduce((l, r) -> l * r)
+        .orElseThrow();
   }
 }
