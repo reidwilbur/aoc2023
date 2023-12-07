@@ -41,6 +41,16 @@ public class Day7Test {
   }
 
   @Test
+  void TestTypeWithJokers() {
+    assertThat(Type.fromJoker(JokerHand.toCards("32T3K")), is(Type.ONE_PAIR));
+    assertThat(Type.fromJoker(JokerHand.toCards("T55J5")), is(Type.FOUR_KIND));
+    assertThat(Type.fromJoker(JokerHand.toCards("KK677")), is(Type.TWO_PAIR));
+    assertThat(Type.fromJoker(JokerHand.toCards("KTJJT")), is(Type.FOUR_KIND));
+    assertThat(Type.fromJoker(JokerHand.toCards("QQQJA")), is(Type.FOUR_KIND));
+    assertThat(Type.fromJoker(JokerHand.toCards("JJJJJ")), is(Type.FIVE_KIND));
+  }
+
+  @Test
   void testGetWinnings_testInput() {
     assertThat(Day7.getWinnings(TEST_INPUT), is(6440L));
   }
@@ -49,4 +59,15 @@ public class Day7Test {
   void testGetWinnings_puzzleInput() {
     assertThat(Day7.getWinnings(PUZZLE_INPUT), is(246163188L));
   }
+
+  @Test
+  void testGetJokerWinnings_testInput() {
+    assertThat(Day7.getJokerWinnings(Input.TEST.load(JokerHand::from)), is(5905L));
+  }
+
+  @Test
+  void testGetJokerWinnings_PuzzleInput() {
+    assertThat(Day7.getJokerWinnings(Input.PUZZLE.load(JokerHand::from)), is(245794069L));
+  }
+
 }
