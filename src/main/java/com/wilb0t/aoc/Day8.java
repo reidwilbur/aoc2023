@@ -1,7 +1,9 @@
 package com.wilb0t.aoc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,21 +36,33 @@ class Day8 {
       return new DesertMap(instrs, nodes);
     }
 
-    public char dirForStep(int step) {
-      return instrs.charAt(step % instrs.length());
+    public char dirForStep(long step) {
+      return instrs.charAt((int)(step % (long)instrs.length()));
     }
   }
 
-  public static int getSteps(DesertMap map) {
-    var curNode = "AAA";
-    var end = "ZZZ";
+  public static long getSteps(DesertMap map) {
+    return getSteps(map, "AAA", Set.of("ZZZ"));
+  }
 
-    var steps = 0;
-    while (!curNode.equals(end)) {
+  static long getSteps(DesertMap map, String startNode, Set<String> endNodes) {
+    var curNode = startNode;
+    var steps = 0L;
+    while (!endNodes.contains(curNode)) {
       var node = map.nodes.get(curNode);
       curNode = node.nextNode(map.dirForStep(steps));
       steps += 1;
     }
     return steps;
   }
+
+  public static long getGhostSteps(DesertMap map) {
+    var startNodes = new ArrayList<>(map.nodes.keySet().stream().filter(name -> name.endsWith("A")).toList());
+    var endNodes = map.nodes.keySet().stream().filter(name -> name.endsWith("Z")).collect(Collectors.toSet());
+
+    var steps = startNodes.stream().map(node -> getSteps(map, node, endNodes)).toList();
+
+    return steps.stream().reduce(Util::lcm).orElseThrow();
+  }
+
 }

@@ -1,9 +1,14 @@
 package com.wilb0t.aoc;
 
 public class Util {
-  public record Pair<A, B>(A first, B second) {
-    public Pair<B, A> swap() {
-      return new Pair<>(second, first);
-    }
+
+  static long gcd(long left, long right) {
+    if (right == 0) return left;
+    return gcd(right, left % right);
+  }
+
+  static long lcm(long left, long right) {
+    var gcd = gcd(left, right);
+    return (left * right) / gcd;
   }
 }
