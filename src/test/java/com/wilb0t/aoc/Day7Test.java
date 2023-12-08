@@ -15,13 +15,13 @@ public class Day7Test {
 
   @Test
   void testType() {
-    assertThat(Type.from(Hand.toCards("AAAAA")), is(Type.FIVE_KIND));
-    assertThat(Type.from(Hand.toCards("AA8AA")), is(Type.FOUR_KIND));
-    assertThat(Type.from(Hand.toCards("23332")), is(Type.FULL_HOUSE));
-    assertThat(Type.from(Hand.toCards("TTT98")), is(Type.THREE_KIND));
-    assertThat(Type.from(Hand.toCards("23432")), is(Type.TWO_PAIR));
-    assertThat(Type.from(Hand.toCards("A23A4")), is(Type.ONE_PAIR));
-    assertThat(Type.from(Hand.toCards("23456")), is(Type.HIGH_CARD));
+    assertThat(Type.from("AAAAA"), is(Type.FIVE_KIND));
+    assertThat(Type.from("AA8AA"), is(Type.FOUR_KIND));
+    assertThat(Type.from("23332"), is(Type.FULL_HOUSE));
+    assertThat(Type.from("TTT98"), is(Type.THREE_KIND));
+    assertThat(Type.from("23432"), is(Type.TWO_PAIR));
+    assertThat(Type.from("A23A4"), is(Type.ONE_PAIR));
+    assertThat(Type.from("23456"), is(Type.HIGH_CARD));
   }
 
   @Test

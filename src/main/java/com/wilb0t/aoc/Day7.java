@@ -3,12 +3,29 @@ package com.wilb0t.aoc;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 class Day7 {
+
+  // all this code is hot hot trash
+
+  public static class StandardOrder implements Comparator<Character> {
+
+    @Override
+    public int compare(Character o1, Character o2) {
+      return StandardCard.from(o1).compareTo(StandardCard.from(o2));
+    }
+  }
+
+  public static class JokerOrder implements Comparator<Character> {
+
+    @Override
+    public int compare(Character o1, Character o2) {
+      return JokerCard.from(o1).compareTo(JokerCard.from(o2));
+    }
+  }
 
   public enum StandardCard {
     TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE;
@@ -55,8 +72,8 @@ class Day7 {
   public enum Type {
     HIGH_CARD, ONE_PAIR, TWO_PAIR, THREE_KIND, FULL_HOUSE, FOUR_KIND, FIVE_KIND;
 
-    public static Type from(List<StandardCard> cards) {
-      var groups = cards.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    public static Type from(String cards) {
+      var groups = cards.chars().mapToObj(i -> (char)i).collect(Collectors.groupingBy(c -> c, Collectors.counting()));
       Integer maxGrpSize = (int)groups.values().stream().mapToLong(l -> l).max().orElseThrow();
       return switch (maxGrpSize) {
         case Integer mc when mc == 5 -> Type.FIVE_KIND;
@@ -119,13 +136,13 @@ class Day7 {
     }
   }
 
-  public record Hand(List<StandardCard> cards, Type type, int bid) implements Comparable<Hand> {
+  public record Hand(String cards, Type type, int bid, Comparator<Character> comp) implements Comparable<Hand> {
     public static Hand from(String input) {
       var parts = input.split("\\s+");
       int bid = Integer.parseInt(parts[1]);
-      var cards = toCards(parts[0]);
+      var cards = parts[0];
       var type = Type.from(cards);
-      return new Hand(cards, type, bid);
+      return new Hand(cards, type, bid, new StandardOrder());
     }
 
     public static List<StandardCard> toCards(String input) {
@@ -138,8 +155,8 @@ class Day7 {
       if (typeComp != 0) {
         return typeComp;
       }
-      for (var idx = 0; idx < cards.size(); idx++) {
-        var cardComp = cards.get(idx).compareTo(other.cards.get(idx));
+      for (var idx = 0; idx < cards.length(); idx++) {
+        var cardComp = comp.compare(cards.charAt(idx), other.cards.charAt(idx));
         if (cardComp != 0) {
           return cardComp;
         }
@@ -176,6 +193,7 @@ class Day7 {
       return 0;
     }
   }
+
   public static long getWinnings(List<Hand> hands) {
     var sorted = hands.stream().sorted().toList();
     long total = 0;
