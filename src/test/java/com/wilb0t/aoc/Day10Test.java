@@ -22,4 +22,15 @@ public class Day10Test {
   void testGetMaxDist_puzzleInput() {
     assertThat(Day10.getMaxDist(PUZZLE_INPUT), is(7012));
   }
+
+  @Test
+  void testGetIntCount_testInput() {
+    var scan = new Input("-test3").parse(Scan::from);
+    assertThat(Day10.getIntCount(scan), is(10));
+  }
+
+  @Test
+  void testGetIntCount_puzzleInput() {
+    assertThat(Day10.getIntCount(PUZZLE_INPUT), is(395));
+  }
 }

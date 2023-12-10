@@ -12,6 +12,39 @@ import java.util.stream.Stream;
 
 class Day10 {
 
+  public enum Dir {
+    N, E, S, W;
+
+    static Dir from(Pos cur, Pos last, char pipechar) {
+      if (cur.equals(last)) {
+        throw new RuntimeException(STR."no direction change for \{cur} \{last}");
+      }
+      Dir dir = Dir.W;
+      if (cur.r > last.r) {
+        dir = S;
+      }
+      if (cur.r < last.r) {
+        dir = N;
+      }
+      if (cur.c > last.c) {
+        dir = E;
+      }
+      if (pipechar == 'J' && dir.equals(Dir.E)) {
+        return Dir.N;
+      }
+      if (pipechar == 'L' && dir.equals(Dir.W)) {
+        return Dir.N;
+      }
+      if (pipechar == 'F' && dir.equals(Dir.W)) {
+        return Dir.S;
+      }
+      if (pipechar == '7' && dir.equals((Dir.E))) {
+        return Dir.S;
+      }
+      return dir;
+    }
+  }
+
   public enum Pipe {
     H('-'), V('|'), WS('7'), WN('J'), EN('L'), ES('F');
 
@@ -103,5 +136,70 @@ class Day10 {
       steps += 1;
     }
     return (steps / 2) + (steps % 2);
+  }
+
+  public static int getIntCount(Scan scan) {
+    var dirmap = initDirMap(scan);
+    markDirMap(scan, dirmap);
+
+    var intcount = 0;
+    for (var r = 0; r < dirmap.length; r++) {
+      var inside = false;
+      var lastdir = '_';
+      for (var c = 0; c < dirmap[0].length; c++) {
+        var mapval = dirmap[r][c];
+        if (inside) {
+          if (mapval != 'n' && mapval != 's') {
+            intcount += 1;
+          } else {
+            if (mapval != lastdir) {
+              inside = false;
+              lastdir = mapval;
+            }
+          }
+        } else {
+          if ((mapval == 'n' || mapval == 's') && mapval != lastdir) {
+            inside = true;
+            lastdir = mapval;
+          }
+        }
+      }
+    }
+    return intcount;
+  }
+
+  static void printDirMap(char[][] dirmap) {
+    for (var r = 0; r < dirmap.length; r++) {
+      var sb = new StringBuilder(dirmap[0].length);
+      for (var c = 0; c < dirmap[0].length; c++) {
+        sb.append(dirmap[r][c]);
+      }
+      System.out.println(sb);
+    }
+    System.out.println();
+  }
+
+  static void markDirMap(Scan scan, char[][] dirmap) {
+    var last = scan.start;
+    var cur = scan.next(scan.start, last);
+    var dir = Dir.E;
+    while (!(dirmap[cur.r][cur.c] == 'n' || dirmap[cur.r][cur.c] == 's')) {
+      var tmpdir = Dir.from(cur, last, scan.at(cur));
+      dir = (tmpdir.equals(Dir.N) || tmpdir.equals(Dir.S)) ? tmpdir : dir;
+      dirmap[cur.r][cur.c] = dir.toString().toLowerCase().charAt(0);
+      var tmp = last;
+      last = cur;
+      cur = scan.next(last, tmp);
+    }
+  }
+
+  static char[][] initDirMap(Scan scan) {
+    var dirmap = new char[scan.map.size()][scan.map.getFirst().length()];
+    for (var r = 0; r < dirmap.length; r++) {
+      for (var c = 0; c < dirmap[0].length; c++) {
+        dirmap[r][c] = scan.map.get(r).charAt(c);
+      }
+    }
+    return dirmap;
   }
 }
