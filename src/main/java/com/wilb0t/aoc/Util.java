@@ -11,4 +11,16 @@ public class Util {
     var gcd = gcd(left, right);
     return (left * right) / gcd;
   }
+
+  public interface IntGridVisitor {
+    void apply(int r, int c, int val);
+  }
+
+  public static void forEach(int[][] grid, IntGridVisitor visitor) {
+    for (int r = 0; r < grid.length; r++) {
+      for (int c = 0; c < grid[0].length; c++) {
+        visitor.apply(r, c, grid[r][c]);
+      }
+    }
+  }
 }

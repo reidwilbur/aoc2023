@@ -48,6 +48,16 @@ public class Input {
     }
   }
 
+  public char[][] loadCharGrid() {
+    try {
+      var caller =
+          StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
+      return getInput(caller).map(String::toCharArray).toArray(char[][]::new);
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public static int[][] copy(int[][] input) {
     var copy = new int[input.length][];
     for (var r = 0; r < input.length; r++) {
