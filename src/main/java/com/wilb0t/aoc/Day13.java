@@ -1,7 +1,9 @@
 package com.wilb0t.aoc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 class Day13 {
 
@@ -33,17 +35,8 @@ class Day13 {
       return lval;
     }
 
-    long getRow(int idx) {
-      long lval = 0;
-      for (var col = 0; col < lines.get(idx).length(); col++) {
-        if (lines.get(idx).charAt(col) == '#') {
-          lval |= (1L << col);
-        }
-      }
-      return lval;
-    }
-
-    int getVRef() {
+    Set<Integer> getVRefs() {
+      var reflidx = new HashSet<Integer>();
       for (var row = 0; row < lines.size() - 1; row++) {
         if (lines.get(row).equals(lines.get(row + 1))) {
           var isrefl = true;
@@ -53,14 +46,15 @@ class Day13 {
             }
           }
           if (isrefl) {
-            return row + 1;
+            reflidx.add(row);
           }
         }
       }
-      return 0;
+      return reflidx;
     }
 
-    int getHRef() {
+    Set<Integer> getHRefs() {
+      var reflidx = new HashSet<Integer>();
       var width = lines.getFirst().length();
       for (var col = 0; col < width - 1; col++) {
         if (getCol(col) == getCol(col + 1)) {
@@ -71,20 +65,56 @@ class Day13 {
             }
           }
           if (isrefl) {
-            return col + 1;
+            reflidx.add(col);
           }
         }
       }
-      return 0;
+      return reflidx;
     }
 
     public int getSummary() {
-      var left = getHRef();
-      var above = getVRef();
+      var left = getHRefs().stream().findFirst().map(idx -> idx + 1).orElse(0);
+      var above = getVRefs().stream().findFirst().map(idx -> idx + 1).orElse(0);
       return (100 * above) + left;
     }
 
+    public Pattern smudge(int tr, int tc) {
+      var smudged = new ArrayList<String>();
+      for (var row = 0; row < lines.size(); row++) {
+        if (row == tr) {
+          var sb = new StringBuilder(lines.get(row));
+          if (sb.charAt(tc) == '.') {
+            sb.setCharAt(tc, '#');
+          } else {
+            sb.setCharAt(tc, '.');
+          }
+          smudged.add(sb.toString());
+        } else {
+          smudged.add(lines.get(row));
+        }
+      }
+      return new Pattern(smudged);
+    }
+
     public int getSummarySmudge() {
+      var left = getHRefs();
+      var above = getVRefs();
+
+      for (var row = 0; row < lines.size(); row++) {
+        for (var col = 0; col < lines.getFirst().length(); col++) {
+          var smudged = smudge(row, col);
+          var sleft = smudged.getHRefs();
+          var sabove = smudged.getVRefs();
+
+          if (!sleft.isEmpty() && !sleft.equals(left)) {
+            sleft.removeAll(left);
+            return sleft.stream().findFirst().orElseThrow() + 1;
+          } else if (!sabove.isEmpty() && !sabove.equals(above)) {
+            sabove.removeAll(above);
+            return 100 * (sabove.stream().findFirst().orElseThrow() + 1);
+          }
+        }
+      }
       return 0;
     }
   }
@@ -94,6 +124,6 @@ class Day13 {
   }
 
   public static int getReflectionSummarySmudge(List<Pattern> patterns) {
-    return 0;
+    return patterns.stream().mapToInt(Pattern::getSummarySmudge).sum();
   }
 }
