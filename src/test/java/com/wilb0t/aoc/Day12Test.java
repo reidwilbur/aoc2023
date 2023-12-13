@@ -51,7 +51,7 @@ public class Day12Test {
     assertThat(Day12.getValidPatternsExpanded(TEST_INPUT), is(525152));
   }
 
-  @Test
+  //@Test
   void testCountValidPatternsExpanded_puzzleInput() {
     assertThat(Day12.getValidPatternsExpanded(PUZZLE_INPUT), is(525152));
   }

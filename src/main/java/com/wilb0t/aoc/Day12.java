@@ -90,13 +90,21 @@ class Day12 {
       last = cur;
     }
 
-    var reject = false;
     for (var idx = 0; idx < Math.min(brokenGrps.size(), grpSizes.size()); idx++) {
       if (!brokenGrps.get(idx).equals(grpSizes.get(idx))) {
-        reject = true;
+        return true;
       }
     }
-    return reject;
+
+//    var grpsleft = grpSizes.subList(brokenGrps.size(), grpSizes.size());
+//    var sizeleft = grpsleft.stream().mapToInt(i -> i).sum() + grpsleft.size() - 1;
+//    var qcount = candidate.chars().filter(c -> c =='?').count();
+//    var pcount = candidate.substring(end).chars().filter(c -> c == '#').count();
+//    if (sizeleft - pcount > qcount) {
+//      return true;
+//    }
+
+    return false;
   }
 
   static boolean accept(String candidate, List<Integer> grpSizes) {
