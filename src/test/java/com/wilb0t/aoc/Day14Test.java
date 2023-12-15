@@ -116,7 +116,7 @@ public class Day14Test {
     }
   }
 
-  //@Test
+  @Test
   void testSpinCycle_testInput() {
     assertThat(Day14.spinCycle(TEST_INPUT, 1_000_000_000), is(64));
   }
