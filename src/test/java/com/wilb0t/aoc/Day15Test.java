@@ -1,9 +1,7 @@
 package com.wilb0t.aoc;
 
-import static com.wilb0t.aoc.Day15.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -28,5 +26,15 @@ public class Day15Test {
   @Test
   void testGetHashSum_puzzleInput() {
     assertThat(Day15.getHashSum(PUZZLE_INPUT), is(511215));
+  }
+
+  @Test
+  void testGetFocusPower_testInput() {
+    assertThat(Day15.getFocusPower(TEST_INPUT), is(145));
+  }
+
+  @Test
+  void testGetFocusPower_puzzleInput() {
+    assertThat(Day15.getFocusPower(PUZZLE_INPUT), is(236057));
   }
 }
