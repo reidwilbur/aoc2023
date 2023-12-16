@@ -119,4 +119,15 @@ public class Input {
       throw new RuntimeException(e);
     }
   }
+
+  public <T> T parseStream(Function<Stream<String>, T> parser) {
+    try {
+      var caller =
+          StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
+      var lines = getInput(caller);
+      return parser.apply(lines);
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
