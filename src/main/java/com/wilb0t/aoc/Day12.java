@@ -40,7 +40,7 @@ class Day12 {
 //    }
 
 //    public int countValidPatterns() {
-//      var qcount = status.chars().filter(c -> c == '?').count();
+//      var qcount = status.chars().filter(x -> x == '?').count();
 //
 //      if (qcount == 0) {
 //        return 1;
@@ -98,8 +98,8 @@ class Day12 {
 
 //    var grpsleft = grpSizes.subList(brokenGrps.size(), grpSizes.size());
 //    var sizeleft = grpsleft.stream().mapToInt(i -> i).sum() + grpsleft.size() - 1;
-//    var qcount = candidate.chars().filter(c -> c =='?').count();
-//    var pcount = candidate.substring(end).chars().filter(c -> c == '#').count();
+//    var qcount = candidate.chars().filter(x -> x =='?').count();
+//    var pcount = candidate.substring(end).chars().filter(x -> x == '#').count();
 //    if (sizeleft - pcount > qcount) {
 //      return true;
 //    }

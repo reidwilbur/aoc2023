@@ -19,6 +19,11 @@ public class Day18Test {
 
   @Test
   void testGetLagoonArea_puzzleInput() {
-    assertThat(Day18.getLagoonArea(PUZZLE_INPUT), is(62));
+    assertThat(Day18.getLagoonArea(PUZZLE_INPUT), is(49578));
+  }
+
+  @Test
+  void testGetLagoonAreaHex_testInput() {
+    assertThat(Day18.getLagoonAreaHex(TEST_INPUT), is(62L));
   }
 }
